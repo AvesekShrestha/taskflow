@@ -1,0 +1,83 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Test results
+TestResults/
+*.trx
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# ASP.NET Core
+wwwroot/uploads/
+wwwroot/temp/
+
+# EF Core local database files
+*.db
+*.db-shm
+*.db-wal
+
+# User-specific files
+*.rsuser
+
+# Generated files
+Generated/
+GeneratedCode/
+
+# Publish output
+publish/
+*.publishsettings
+
+# Docker
+docker-compose.override.yml
+
+# Certificates / secrets
+*.pfx
+*.p12
+secrets.json
+
+# Local configuration
+appsettings.Local.json
+appsettings.Development.local.json

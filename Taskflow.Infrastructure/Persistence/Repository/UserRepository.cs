@@ -12,6 +12,11 @@ public sealed class UserRepository(AppDbContext db) : IUserRepository
     await _db.User.AddAsync(user);
   }
 
+  public async Task<List<UserAggregate>> GetAllAsync()
+  {
+    return _db.User.ToList();
+  }
+
   public async Task<UserAggregate?> GetByEmailAsync(string email)
   {
     return await _db.User.FirstOrDefaultAsync(u => u.Email.Value == email);

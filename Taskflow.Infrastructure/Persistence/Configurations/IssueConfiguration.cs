@@ -10,8 +10,10 @@ public sealed class IssueConfiguration : IEntityTypeConfiguration<IssueAggregate
 {
   public void Configure(EntityTypeBuilder<IssueAggregate> builder)
   {
+    builder.ToTable("Issue");
     builder.HasKey(key => key.Id);
     builder.Property(property => property.Id).ValueGeneratedNever();
+
 
     builder.HasOne<ProjectAggregate>()
       .WithMany()

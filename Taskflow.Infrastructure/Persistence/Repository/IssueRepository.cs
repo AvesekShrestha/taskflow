@@ -19,7 +19,7 @@ public sealed class IssueRepository(AppDbContext db) : IIssueRepository
 
   public async Task<IssueAggregate?> GetByIdAsync(Guid id)
   {
-    return await _db.Issue.FirstOrDefaultAsync();
+    return await _db.Issue.FirstOrDefaultAsync(property => property.Id == id);
   }
 
   public async Task RemoveAsync(IssueAggregate issue)

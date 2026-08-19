@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Taskflow.Application.Issue;
 using Taskflow.Application.Project;
 using Taskflow.Application.User;
 
@@ -10,6 +11,7 @@ public static class DependencyInjection
   {
     services.AddScoped<IUserService, UserService>();
     services.AddScoped<IProjectService, ProjectService>();
+    services.AddScoped<IIssueService, IssueService>();
 
     return services;
   }

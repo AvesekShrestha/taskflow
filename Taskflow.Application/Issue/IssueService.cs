@@ -2,6 +2,7 @@ using Taskflow.Application.Issue.DTO;
 using Taskflow.Application.Issue.DTO.Comments;
 using Taskflow.Application.Issue.Mapper;
 using Taskflow.Domain.Issue;
+using Taskflow.Domain.Issue.Entity;
 using Taskflow.Domain.Shared.Interfaces;
 
 namespace Taskflow.Application.Issue;
@@ -11,29 +12,26 @@ public sealed class IssueService(IIssueRepository repository, IUnitOfWork unitOf
   private readonly IIssueRepository _repository = repository;
   private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-  public async Task<IssueResponse> AddCommentAsync(Guid issueId, CommentRequest request)
+
+  public async Task<IssueResponse> AddCommentAsync(Guid issueId, Guid userId, CommentRequest request)
   {
     IssueAggregate issue = await _repository.GetByIdAsync(issueId)
       ??
       throw new KeyNotFoundException("No such issue");
 
-    issue.AddComment(Guid.NewGuid(), request.Content, );
-    await _repository.AddAsync(issue);
+    issue.AddComment(Guid.NewGuid(), request.Content, userId);
     await _unitOfWork.SaveChangesAsync();
 
     return issue.ToResponse();
   }
 
-  public async Task<IssueResponse> AddIssueAsync(Guid projectId, IssueRequest request)
+  public async Task<IssueResponse> AddIssueAsync(Guid userId, IssueRequest request)
   {
-    IssueStatus status = IssueStatusMapper.ToIssueStatus(request.Status);
-    IssuePriority priority = IssuePriorityMapper.ToIssuePriority(request.Priority);
     IssueAggregate issue = IssueAggregate.Create(Guid.NewGuid(),
                                                  request.Title,
                                                  request.Description,
-                                                 priority,
-                                                 status,
-                                                 projectId);
+                                                 request.ProjectId,
+                                                 userId);
     await _repository.AddAsync(issue);
     await _unitOfWork.SaveChangesAsync();
 
@@ -47,7 +45,6 @@ public sealed class IssueService(IIssueRepository repository, IUnitOfWork unitOf
       throw new KeyNotFoundException("No such issue");
 
     issue.AssignTo(request.UserId);
-    await _repository.AddAsync(issue);
     await _unitOfWork.SaveChangesAsync();
 
     return issue.ToResponse();
@@ -62,7 +59,6 @@ public sealed class IssueService(IIssueRepository repository, IUnitOfWork unitOf
     IssuePriority priority = IssuePriorityMapper.ToIssuePriority(request.Priority);
     issue.ChangePriority(priority);
 
-    await _repository.AddAsync(issue);
     await _unitOfWork.SaveChangesAsync();
 
     return issue.ToResponse();
@@ -77,7 +73,6 @@ public sealed class IssueService(IIssueRepository repository, IUnitOfWork unitOf
     IssueStatus status = IssueStatusMapper.ToIssueStatus(request.Status);
     issue.ChangeStatus(status);
 
-    await _repository.AddAsync(issue);
     await _unitOfWork.SaveChangesAsync();
 
     return issue.ToResponse();
@@ -98,6 +93,27 @@ public sealed class IssueService(IIssueRepository repository, IUnitOfWork unitOf
     return issue.ToResponse();
   }
 
+  public async Task<CommentResponse> GetCommentById(Guid issueId, Guid commentId)
+  {
+    IssueAggregate issue = await _repository.GetByIdAsync(issueId)
+        ??
+        throw new KeyNotFoundException("No such issue");
+    Comment comment = issue.Comments.FirstOrDefault(comment => comment.Id == commentId)
+      ??
+        throw new KeyNotFoundException("No comment found");
+
+    return comment.ToResponse();
+  }
+
+  public async Task<List<CommentResponse>> GetCommentsByIssueIdAsync(Guid issueId)
+  {
+    IssueAggregate issue = await _repository.GetByIdAsync(issueId)
+    ??
+    throw new KeyNotFoundException("No such issue");
+
+    return [.. issue.Comments.Select(comment => comment.ToResponse())];
+  }
+
   public async Task RemoveCommentAsync(Guid issueId, Guid commentId)
   {
     IssueAggregate issue = await _repository.GetByIdAsync(issueId)
@@ -106,7 +122,6 @@ public sealed class IssueService(IIssueRepository repository, IUnitOfWork unitOf
 
     issue.RemoveComment(commentId);
 
-    await _repository.AddAsync(issue);
     await _unitOfWork.SaveChangesAsync();
   }
 
@@ -117,5 +132,6 @@ public sealed class IssueService(IIssueRepository repository, IUnitOfWork unitOf
                throw new KeyNotFoundException("No such issue");
 
     await _repository.RemoveAsync(issue);
+    await _unitOfWork.SaveChangesAsync();
   }
 }

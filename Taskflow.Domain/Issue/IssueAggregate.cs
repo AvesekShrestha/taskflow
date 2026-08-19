@@ -11,8 +11,8 @@ public sealed class IssueAggregate : AggregateRoot<Guid>
 
   public string Title { get; private set; }
   public string Description { get; private set; }
-  public IssueStatus Status { get; private set; }
-  public IssuePriority Priority { get; private set; }
+  public IssueStatus Status { get; private set; } = IssueStatus.ToDo;
+  public IssuePriority Priority { get; private set; } = IssuePriority.Medium;
   public Guid ProjectId { get; private set; }
   public Guid ReportedBy { get; private set; }
   public Guid? AssignedTo { get; private set; }
@@ -23,16 +23,12 @@ public sealed class IssueAggregate : AggregateRoot<Guid>
   private IssueAggregate(Guid id,
                          string title,
                          string description,
-                         IssuePriority priority,
-                         IssueStatus status,
                          Guid projectId,
                          Guid reportedBy) : base(id)
   {
 
     Title = title;
     Description = description;
-    Status = status;
-    Priority = priority;
     ProjectId = projectId;
     ReportedBy = reportedBy;
   }
@@ -40,16 +36,12 @@ public sealed class IssueAggregate : AggregateRoot<Guid>
   public static IssueAggregate Create(Guid id,
                                       string title,
                                       string description,
-                                      IssuePriority priority,
-                                      IssueStatus status,
                                       Guid projectId,
                                       Guid reportedBy)
   {
     return new IssueAggregate(id,
                               title,
                               description,
-                              priority,
-                              status,
                               projectId,
                               reportedBy);
   }

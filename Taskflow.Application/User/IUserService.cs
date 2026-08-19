@@ -9,5 +9,6 @@ public interface IUserService
   public Task<UserResponse> LoginAsync(LoginRequest payload);
   public Task<UserResponse> GetByEmailAsync(string email);
   public Task<UserResponse> GetByIdAsync(Guid id);
+  public Task<List<UserResponse>> GetAllAsync();
   public Task RemoveAsync(Guid id);
 }

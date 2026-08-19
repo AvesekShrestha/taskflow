@@ -19,6 +19,8 @@ public sealed class Password : ValueObject
     if (value.Length < 8)
       throw new ArgumentException("Password must be at least 8 characters long.");
 
+
+
     return new Password(value);
   }
 

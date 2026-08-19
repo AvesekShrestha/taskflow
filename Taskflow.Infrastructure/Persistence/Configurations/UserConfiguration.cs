@@ -8,6 +8,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<UserAggregate>
 {
   public void Configure(EntityTypeBuilder<UserAggregate> builder)
   {
+    builder.ToTable("User");
     builder.HasKey(key => key.Id);
 
     builder.ComplexProperty(property => property.Username, username =>

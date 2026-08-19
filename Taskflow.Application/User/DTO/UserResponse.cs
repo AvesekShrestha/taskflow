@@ -4,5 +4,7 @@ public sealed record UserResponse(
   Guid Id,
   string Username,
   string Email,
-  UserRole Role
+  UserRole Role,
+  string? Token
+
 );

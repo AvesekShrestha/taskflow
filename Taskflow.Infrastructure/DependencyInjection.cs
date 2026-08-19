@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Taskflow.Application.User.Authentication;
 using Taskflow.Domain.Issue;
 using Taskflow.Domain.Project;
 using Taskflow.Domain.Shared.Interfaces;
 using Taskflow.Domain.User;
+using Taskflow.Infrastructure.Authentication;
 using Taskflow.Infrastructure.Persistence;
 using Taskflow.Infrastructure.Persistence.Repository;
 
@@ -20,6 +22,8 @@ public static class DependencyInjection
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<IProjectRepository, ProjectRepository>();
     services.AddScoped<IIssueRepository, IssueRepository>();
+    services.AddScoped<ITokenService, JWTTokenService>();
+    services.AddScoped<IPasswordHasher, PasswordHasher>();
 
     return services;
   }

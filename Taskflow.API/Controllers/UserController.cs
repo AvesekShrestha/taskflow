@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Taskflow.Application.User;
 using Taskflow.Application.User.DTO;
@@ -18,10 +19,19 @@ public sealed class UserController(IUserService userService) : ControllerBase
     return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
   }
 
+  [Authorize]
   [HttpGet("{id:guid}")]
   public async Task<IActionResult> GetById(Guid id)
   {
     UserResponse result = await _userService.GetByIdAsync(id);
+    return Ok(result);
+  }
+
+  [Authorize]
+  [HttpGet("")]
+  public async Task<IActionResult> GetAll()
+  {
+    List<UserResponse> result = await _userService.GetAllAsync();
     return Ok(result);
   }
 

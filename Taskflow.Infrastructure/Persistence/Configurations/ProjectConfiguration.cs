@@ -8,6 +8,7 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<ProjectAggre
 {
   public void Configure(EntityTypeBuilder<ProjectAggregate> builder)
   {
+    builder.ToTable("Project");
     builder.HasKey(key => key.Id);
 
     builder.OwnsMany(

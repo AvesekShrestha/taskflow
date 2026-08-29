@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Taskflow.Application.Project;
 using Taskflow.Application.Project.DTO;
@@ -11,6 +12,7 @@ public sealed class ProjectController(IProjectService projectService) : Controll
 
   private readonly IProjectService _projectService = projectService;
 
+  [Authorize]
   [HttpGet("{id}")]
   public async Task<IActionResult> GetById(Guid id)
   {
@@ -18,6 +20,7 @@ public sealed class ProjectController(IProjectService projectService) : Controll
     return Ok(result);
   }
 
+  [Authorize]
   [HttpPost]
   public async Task<IActionResult> AddProject(ProjectRequest request)
   {
@@ -29,6 +32,7 @@ public sealed class ProjectController(IProjectService projectService) : Controll
         );
   }
 
+  [Authorize]
   [HttpPost("{projectId}/member")]
   public async Task<IActionResult> AddMember(Guid projectId, MemberRequest request)
   {
@@ -37,6 +41,7 @@ public sealed class ProjectController(IProjectService projectService) : Controll
     return Ok(result);
   }
 
+  [Authorize]
   [HttpPatch("{projectId}/member/{userId}")]
   public async Task<IActionResult> ChangeMemberRole(Guid projectId, Guid userId, ChangeMemberRoleRequest request)
   {
@@ -44,6 +49,7 @@ public sealed class ProjectController(IProjectService projectService) : Controll
     return Ok(result);
   }
 
+  [Authorize]
   [HttpDelete("{projectId}/member/{userId}")]
   public async Task<IActionResult> RemoveMember(Guid projectId, Guid userId)
   {
@@ -51,6 +57,7 @@ public sealed class ProjectController(IProjectService projectService) : Controll
     return Ok(result);
   }
 
+  [Authorize]
   [HttpDelete("{projectId}")]
   public async Task<IActionResult> RemoveProject(Guid projectId)
   {

@@ -16,7 +16,7 @@ public sealed class UserService(IUserRepository userRepository, IUnitOfWork unit
   public async Task<UserResponse> CreateUserAsync(RegisterRequest payload)
   {
     UserAggregate? existingUser = await _userRepository.GetByEmailAsync(payload.Email);
-    if (existingUser is not null) throw new Exception("User already exists");
+    if (existingUser is not null) throw new InvalidOperationException("User already exists");
 
     string hashedPassword = _passwordHasher.HashPassword(payload.Password);
     Guid Id = Guid.NewGuid();

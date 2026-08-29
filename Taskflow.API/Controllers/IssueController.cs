@@ -14,7 +14,6 @@ public sealed class IssueController(IIssueService issueService) : ControllerBase
 
   private readonly IIssueService _issueService = issueService;
 
-
   [Authorize]
   [Route("{issueId}")]
   [HttpGet]

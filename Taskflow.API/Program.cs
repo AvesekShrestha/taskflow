@@ -1,11 +1,14 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Taskflow.API.Exceptions;
 using Taskflow.Application;
 using Taskflow.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
+  builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+  builder.Services.AddProblemDetails();
   builder.Services.AddControllers();
   builder.Services.AddInfrastructure(builder.Configuration);
   builder.Services.AddApplication();
@@ -29,6 +32,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 }
 {
   WebApplication app = builder.Build();
+  app.UseExceptionHandler();
   app.UseHttpsRedirection();
   app.UseAuthentication();
   app.UseAuthorization();
